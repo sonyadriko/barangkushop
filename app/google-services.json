@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "140012703897",
+    "firebase_url": "https://barangkushop-8a899.firebaseio.com",
+    "project_id": "barangkushop-8a899",
+    "storage_bucket": "barangkushop-8a899.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140012703897:android:8a9a296da770355e",
+        "android_client_info": {
+          "package_name": "com.example.xdreamer.barangkushop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140012703897-lkujdn0t31oa98dv1vasjqu3qebstub3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC654-9Exey0JTqMSK5twIw0NJyoTUe-Yc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
