@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
 import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.R;
@@ -20,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+        View.OnCreateContextMenuListener {
 
     public TextView txt_cartname, txt_cartprice;
     public ImageView img_cart_count;
@@ -36,17 +39,25 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
         txt_cartname = itemView.findViewById(R.id.cart_item_name);
         txt_cartprice = itemView.findViewById(R.id.cart_item_price);
         img_cart_count = itemView.findViewById(R.id.cart_item_count);
+
+        itemView.setOnCreateContextMenuListener(this);
     }
 
     @Override
     public void onClick(View v) {
 
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        menu.setHeaderTitle("Select action");
+        menu.add(0,0,getAdapterPosition(), Common.DELETE);
+    }
 }
 
-public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
+public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
-    private List<Order> listData =  new ArrayList<>();
+    private List<Order> listData = new ArrayList<>();
     private Context context;
 
     public CartAdapter(List<Order> listData, Context context) {
@@ -58,19 +69,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
     @Override
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.cart_layout,viewGroup,false);
+        View itemView = inflater.inflate(R.layout.cart_layout, viewGroup, false);
         return new CartViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder cartViewHolder, int i) {
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(""+listData.get(i).getQuantity(), Color.RED);
+                .buildRound("" + listData.get(i).getQuantity(), Color.RED);
         cartViewHolder.img_cart_count.setImageDrawable(drawable);
 
-        Locale locale = new Locale("en","US");
+        Locale locale = new Locale("id", "ID");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
-        int price = (Integer.parseInt(listData.get(i).getPrice()))*(Integer.parseInt(listData.get(i).getQuantity()));
+        int price = (Integer.parseInt(listData.get(i).getPrice())) * (Integer.parseInt(listData.get(i).getQuantity()));
         cartViewHolder.txt_cartprice.setText(format.format(price));
         cartViewHolder.txt_cartname.setText(listData.get(i).getProductName());
     }

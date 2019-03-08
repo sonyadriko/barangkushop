@@ -33,6 +33,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
+    <EditText
+        android:layout_below="@id/etPasswordSignUp"
+        android:id="@+id/etSecureCode"
+        android:hint="Secure Code"
+        android:inputType="number"
+        android:maxLength="6"
+        android:layout_margin="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
 
     <Button
         android:id="@+id/btnSignUp"

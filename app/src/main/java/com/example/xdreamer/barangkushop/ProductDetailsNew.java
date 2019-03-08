@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Database.Database;
 import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.Object.Products;
@@ -73,9 +74,14 @@ public class ProductDetailsNew extends AppCompatActivity {
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppbar);
 
         if (getIntent() != null)
-            productId = getIntent().getStringExtra("ProductId");
+            productId = getIntent().getStringExtra("productId");
         if (!productId.isEmpty()) {
-            getDetailProduct(productId);
+            if (Common.isConnectedToInternet(getBaseContext())) {
+                getDetailProduct(productId);
+            } else {
+                Toast.makeText(ProductDetailsNew.this, "Please check your connection...", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
     }
 

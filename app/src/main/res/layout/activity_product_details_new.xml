@@ -94,14 +94,25 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <ImageView
+                       <!-- <ImageView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_weight="1"
                             android:padding="12dp"
                             android:src="@drawable/ic_attach_money_black_24dp" />
+-->
 
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginTop="12dp"
+                            android:padding="10dp"
+                            android:text="Rp"
+                            android:textColor="#000"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
                         <TextView
                             android:id="@+id/product_pricedetailnew"
                             android:layout_width="0dp"

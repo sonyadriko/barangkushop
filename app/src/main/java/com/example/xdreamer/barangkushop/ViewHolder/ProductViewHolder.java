@@ -12,7 +12,7 @@ import com.example.xdreamer.barangkushop.R;
 public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public TextView product_name;
-    public ImageView product_image;
+    public ImageView product_image,fav_image;
 
     private ItemClickListener itemClickListener;
 
@@ -25,7 +25,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder implements View.O
 
         product_name = itemView.findViewById(R.id.product_name);
         product_image = itemView.findViewById(R.id.product_image);
-
+        fav_image = itemView.findViewById(R.id.imageFAV);
         itemView.setOnClickListener(this);
     }
 

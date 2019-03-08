@@ -45,18 +45,42 @@ public class Database extends SQLiteAssetHelper {
 
     public void addToCart(Order order) {
         SQLiteDatabase db = getReadableDatabase();
-        String query = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Discount) VALUES('%s', '%s', '%s','%s','%s');",
+        String queryy = String.format("INSERT INTO OrderDetail(ProductId,ProductName,Quantity,Price,Discount) VALUES('%s', '%s', '%s','%s','%s');",
                 order.getProductId(),
                 order.getProductName(),
                 order.getQuantity(),
                 order.getPrice(),
                 order.getDiscount());
-        db.execSQL(query);
+        db.execSQL(queryy);
     }
 
     public void cleanCart() {
         SQLiteDatabase db = getReadableDatabase();
         String query = String.format("DELETE FROM OrderDetail");
         db.execSQL(query);
+    }
+
+    public void addToFavorites(String foodId){
+        SQLiteDatabase db = getReadableDatabase();
+        String queryes = String.format("INSERT INTO Favorites(FoodId) VALUES('%s');",foodId);
+        db.execSQL(queryes);
+    }
+
+    public void removeFromFavorites(String foodId){
+        SQLiteDatabase db = getReadableDatabase();
+        String queryes = String.format("DELETE FROM Favorites WHERE FoodId='%s';",foodId);
+        db.execSQL(queryes);
+    }
+
+    public boolean HasisFavorite(String foodId){
+        SQLiteDatabase db = getReadableDatabase();
+        String queryess = String.format("SELECT * FROM Favorites WHERE FoodId='%s';",foodId);
+        Cursor cursor = db.rawQuery(queryess,null);
+        if (cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
     }
 }

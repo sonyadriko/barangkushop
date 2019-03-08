@@ -1,11 +1,12 @@
 package com.example.xdreamer.barangkushop;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,7 +61,10 @@ public class Cart extends AppCompatActivity {
         placeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialogAlert();
+                if (cart.size() > 0)
+                    showDialogAlert();
+                else
+                    Toast.makeText(Cart.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -69,7 +73,7 @@ public class Cart extends AppCompatActivity {
 
     private void showDialogAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Cart.this);
-        alertDialog.setTitle("One More Step~");
+        alertDialog.setTitle("One More Step");
         alertDialog.setMessage("Enter Your IGN");
 
         final EditText editText = new EditText(Cart.this);
@@ -111,15 +115,36 @@ public class Cart extends AppCompatActivity {
     private void loadListFood() {
         cart = new Database(this).getCarts();
         adapter = new CartAdapter(cart, this);
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
 
         int total = 0;
-        for (Order order:cart)
-            total+=(Integer.parseInt(order.getPrice()))*(Integer.parseInt(order.getQuantity()));
-        Locale locale = new Locale("en","US");
+        for (Order order : cart)
+            total += (Integer.parseInt(order.getPrice())) * (Integer.parseInt(order.getQuantity()));
+        Locale locale = new Locale("id", "ID");
         NumberFormat format = NumberFormat.getCurrencyInstance(locale);
 
         totalPrice.setText(format.format(total));
 
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle().equals(Common.DELETE)) {
+            deleteCart(item.getOrder());
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void deleteCart(int order) {
+
+        cart.remove(order);
+
+        new Database(this).cleanCart();
+
+        for (Order item : cart) {
+            new Database(this).addToCart(item);
+        }
+        loadListFood();
     }
 }

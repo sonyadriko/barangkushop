@@ -15,15 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
 import com.example.xdreamer.barangkushop.Object.Category;
+import com.example.xdreamer.barangkushop.Service.ListenOrder;
 import com.example.xdreamer.barangkushop.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
+
+import io.paperdb.Paper;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -52,7 +56,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         category = database.getReference("Category");
 
         DrawerLayout drawerLayout = findViewById(R.id.drawerlayout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -77,7 +81,16 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        loadMenu();
+        Paper.init(this);
+
+        if (Common.isConnectedToInternet(this))
+            loadMenu();
+        else {
+            Toast.makeText(Home.this, "Please check your connection...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //  startActivity(new Intent(Home.this, ListenOrder.class));
 
     }
 
@@ -127,7 +140,11 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         } else if (id == R.id.nav_orders) {
             Intent orderIntent = new Intent(Home.this, OrderStatus.class);
             startActivity(orderIntent);
-        } else if (id == R.id.nav_logout){
+        } else if (id == R.id.nav_logout) {
+            //Delete remember user & password
+            Paper.book().destroy();
+
+            //Logout
             Intent ignOut = new Intent(Home.this, SignIn.class);
             ignOut.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(ignOut);
