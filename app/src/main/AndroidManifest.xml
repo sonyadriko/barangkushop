@@ -11,13 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ForgotPassword"></activity>
+        <activity android:name=".Payment"></activity>
 
         <service
-            android:name=".Service.ListenOrder"
-            android:enabled="true"
-            android:exported="true"></service>
+            android:name="com.paypal.android.sdk.payments.PayPalService"
+            android:exported="false" />
 
+        <activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
+        <activity android:name=".ForgotPassword" />
         <activity android:name=".OrderStatus" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -33,6 +37,17 @@
         <activity android:name=".ProductDetail" />
         <activity android:name=".ProductDetailsNew" />
         <activity android:name=".Cart" />
+
+        <service android:name=".Service.MyFirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Service.MyFirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

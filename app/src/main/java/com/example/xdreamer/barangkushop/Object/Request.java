@@ -3,28 +3,27 @@ package com.example.xdreamer.barangkushop.Object;
 import java.util.List;
 
 public class Request {
-    private String phone, name, address, total;
-    private List<Order> products;
+    private String phone;
+    private String name;
+    private String address;
+    private String total;
     private String status;
+    private String comment;
+    //private String paymentState;  when using PAYPAL USING THIS STRING
+    private List<Order> products;
 
     public Request() {
+
     }
 
-    public Request(String phone, String name, String address, String total, List<Order> products) {
+    public Request(String phone, String name, String address, String total, String status, String comment, List<Order> products) {
         this.phone = phone;
         this.name = name;
         this.address = address;
         this.total = total;
-        this.products = products;
-        this.status = "0";
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
         this.status = status;
+        this.comment = comment;
+        this.products = products;
     }
 
     public String getPhone() {
@@ -59,6 +58,23 @@ public class Request {
         this.total = total;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+
     public List<Order> getProducts() {
         return products;
     }
@@ -67,3 +83,4 @@ public class Request {
         this.products = products;
     }
 }
+

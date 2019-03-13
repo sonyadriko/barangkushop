@@ -2,7 +2,9 @@ package com.example.xdreamer.barangkushop;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -28,6 +30,8 @@ public class ProductList extends AppCompatActivity {
 
     String categoryId = "";
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
     FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter;
 
     Database localDB;
@@ -36,6 +40,8 @@ public class ProductList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
+
+        swipeRefreshLayout = findViewById(R.id.swipe_layout_list);
 
         database = FirebaseDatabase.getInstance();
         productList = database.getReference("Products");
@@ -46,6 +52,45 @@ public class ProductList extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (getIntent() != null)
+                    categoryId = getIntent().getStringExtra("CategoryId");
+                if (!categoryId.isEmpty() && categoryId != null) {
+                    if (Common.isConnectedToInternet(getBaseContext())) {
+                        loadListFood(categoryId);
+                    } else {
+                        Toast.makeText(ProductList.this, "Please check your connection...", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                }
+            }
+        });
+
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                if (getIntent() != null)
+                    categoryId = getIntent().getStringExtra("CategoryId");
+                if (!categoryId.isEmpty() && categoryId != null) {
+                    if (Common.isConnectedToInternet(getBaseContext())) {
+                        loadListFood(categoryId);
+                    } else {
+                        Toast.makeText(ProductList.this, "Please check your connection...", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                }
+            }
+        });
 
         if (getIntent() != null)
             categoryId = getIntent().getStringExtra("CategoryId");
@@ -68,6 +113,7 @@ public class ProductList extends AppCompatActivity {
             @Override
             protected void populateViewHolder(final ProductViewHolder viewHolder, final Products model, final int position) {
                 viewHolder.product_name.setText(model.getName());
+               // viewHolder.product_price.setText(String.format("Rp. "+model.getPrice()));
                 Picasso.get()
                         .load(model.getImage())
                         .into(viewHolder.product_image);
@@ -82,7 +128,7 @@ public class ProductList extends AppCompatActivity {
                     }
                 });
 
-                if (localDB.HasisFavorite(adapter.getRef(position).getKey()))
+              /*  if (localDB.HasisFavorite(adapter.getRef(position).getKey()))
                     viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
 
                 viewHolder.fav_image.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +145,11 @@ public class ProductList extends AppCompatActivity {
                         }
                     }
                 });
+                */
             }
         };
         recyclerView.setAdapter(adapter);
+        swipeRefreshLayout.setRefreshing(false);
+
     }
 }

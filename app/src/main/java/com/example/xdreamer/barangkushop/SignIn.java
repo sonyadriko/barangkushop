@@ -78,7 +78,7 @@ public class SignIn extends AppCompatActivity {
 
 
 
-                    databaseReference.addValueEventListener(new ValueEventListener() {
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.child(nomorhp.getText().toString()).exists()) {
@@ -92,6 +92,8 @@ public class SignIn extends AppCompatActivity {
                                     Common.currentUser = user;
                                     startActivity(succes);
                                     finish();
+
+                                    databaseReference.removeEventListener(this);
                                 } else {
                                     Toast.makeText(SignIn.this, "Sign in failed", Toast.LENGTH_SHORT).show();
                                 }

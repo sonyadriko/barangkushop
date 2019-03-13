@@ -1,33 +1,53 @@
 package com.example.xdreamer.barangkushop;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xdreamer.barangkushop.Common.Common;
+import com.example.xdreamer.barangkushop.Common.Config;
 import com.example.xdreamer.barangkushop.Database.Database;
+import com.example.xdreamer.barangkushop.Object.MyResponse;
+import com.example.xdreamer.barangkushop.Object.Notification;
 import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.Object.Request;
+import com.example.xdreamer.barangkushop.Object.Sender;
+import com.example.xdreamer.barangkushop.Object.Token;
+import com.example.xdreamer.barangkushop.Remote.APIService;
 import com.example.xdreamer.barangkushop.ViewHolder.CartAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Cart extends AppCompatActivity {
+
+    private static final int PAYPAL_REQUEST_CODE = 9999;
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -42,6 +62,13 @@ public class Cart extends AppCompatActivity {
 
     CartAdapter adapter;
 
+    APIService mService;
+
+    static PayPalConfiguration config = new PayPalConfiguration()
+            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+            .clientId(Config.PAYPAL_CLIENT_ID);
+    String address, comment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +76,13 @@ public class Cart extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Request");
+
+        //ini paypal
+        //Intent intpay = new Intent(this, PayPalService.class);
+        //intpay.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+        //startService(intpay);
+
+        mService = Common.getFCMService();
 
         recyclerView = findViewById(R.id.listCart);
         recyclerView.setHasFixedSize(true);
@@ -76,30 +110,65 @@ public class Cart extends AppCompatActivity {
         alertDialog.setTitle("One More Step");
         alertDialog.setMessage("Enter Your IGN");
 
-        final EditText editText = new EditText(Cart.this);
+        /*final EditText editText = new EditText(Cart.this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         );
-        editText.setLayoutParams(lp);
-        alertDialog.setView(editText);
+        */
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View layout_ordercomment = inflater.inflate(R.layout.order_confirm_layout, null);
+
+        final EditText edtIgn = layout_ordercomment.findViewById(R.id.edtIGNOrder);
+        final EditText edtComment = layout_ordercomment.findViewById(R.id.edtCommentOrder);
+
+        alertDialog.setView(layout_ordercomment);
         alertDialog.setIcon(R.drawable.ic_shopping_cart_black_24dp);
 
         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                //Using paypal
+               /* address = edtIgn.getText().toString();
+                comment = edtComment.getText().toString();
+
+                String formatamount = totalPrice.getText().toString()
+                        .replace("$", "")
+                        .replace(",", "");
+                PayPalPayment payPalPayment = new PayPalPayment(new BigDecimal(formatamount),
+                        "USD",
+                        "Barangku Order",
+                        PayPalPayment.PAYMENT_INTENT_SALE);
+
+                Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
+                intent.putExtra(PaymentActivity.EXTRA_PAYMENT, payPalPayment);
+                startActivityForResult(intent, PAYPAL_REQUEST_CODE); */
+                //end of paypal
+
+
                 Request request = new Request(
                         Common.currentUser.getPhone(),
                         Common.currentUser.getName(),
-                        editText.getText().toString(),
+                        address,
                         totalPrice.getText().toString(),
+                        "0",
+                        comment,
                         cart
                 );
-                requests.child(String.valueOf(System.currentTimeMillis())).setValue(request);
+
+                String order_number = String.valueOf(System.currentTimeMillis());
+                requests.child(order_number).setValue(request);
 
                 new Database(getBaseContext()).cleanCart();
-                Toast.makeText(Cart.this, "Thank You, Order place", Toast.LENGTH_SHORT).show();
-                finish();
+
+                sendNotificationOrder(order_number);
+                // Toast.makeText(Cart.this, "Thank You, Order place", Toast.LENGTH_SHORT).show();
+                //sendPayment();
+                showPaymentRekening();
+
             }
         });
         alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -110,6 +179,106 @@ public class Cart extends AppCompatActivity {
         });
         alertDialog.show();
 
+    }
+
+    private void showPaymentRekening() {
+    }
+
+    private void sendPayment() {
+        if (Common.currentUser != null)
+            startActivity(new Intent(Cart.this, Payment.class));
+    }
+
+
+    //when using paypal, use onActivityResult :))
+    /*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PAYPAL_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                PaymentConfirmation confirmation = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
+                if (confirmation != null) {
+                    try {
+                        String paymentDetail = confirmation.toJSONObject().toString(4);
+                        JSONObject jsonObject = new JSONObject(paymentDetail);
+
+
+                        Request request = new Request(
+                                Common.currentUser.getPhone(),
+                                Common.currentUser.getName(),
+                                address,
+                                totalPrice.getText().toString(),
+                                "0",
+                                comment,
+                                jsonObject.getJSONObject("responese").getString("state"),
+                                cart
+
+                        );
+
+                        String order_number = String.valueOf(System.currentTimeMillis());
+                        requests.child(order_number).setValue(request);
+
+                        new Database(getBaseContext()).cleanCart();
+
+                        sendNotificationOrder(order_number);
+                        Toast.makeText(Cart.this, "Thank You, Order place", Toast.LENGTH_SHORT).show();
+                        finish();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(this, "Payment cancel", Toast.LENGTH_SHORT).show();
+            } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
+                Toast.makeText(this, "Invalid Payment", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    */
+
+    private void sendNotificationOrder(final String order_number) {
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query data = tokens.orderByChild("serverToken").equalTo(true);
+        data.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Token serverTokenss = postSnapshot.getValue(Token.class);
+
+                    Notification notifications = new Notification("Barangku", "You have new order" + order_number);
+                    Sender content = new Sender(serverTokenss.getToken(), notifications);
+
+                    mService.sendNotification(content)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.code() == 200) {
+                                        if (response.body().succes == 1) {
+                                            Toast.makeText(Cart.this, "Thank you, order place", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        } else {
+                                            Toast.makeText(Cart.this, "Failed", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+                                    Log.e("ERROR", t.getMessage());
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void loadListFood() {
