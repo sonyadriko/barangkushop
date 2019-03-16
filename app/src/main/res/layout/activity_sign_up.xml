@@ -46,6 +46,8 @@
 
     <Button
         android:id="@+id/btnSignUp"
+        android:background="#1a75ff"
+        android:textColor="#fff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

@@ -2,6 +2,16 @@ package com.example.xdreamer.barangkushop.Object;
 
 public class Order {
     private String ProductId, ProductName, Quantity, Price, Discount;
+    private String Image;
+
+    public Order(String productId, String productName, String quantity, String price, String discount, String image) {
+        ProductId = productId;
+        ProductName = productName;
+        Quantity = quantity;
+        Price = price;
+        Discount = discount;
+        Image = image;
+    }
 
     public Order(String productId, String productName, String quantity, String price, String discount) {
         ProductId = productId;
@@ -9,6 +19,14 @@ public class Order {
         Quantity = quantity;
         Price = price;
         Discount = discount;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
     }
 
     public String getProductId() {

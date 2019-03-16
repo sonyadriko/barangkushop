@@ -16,6 +16,7 @@ import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
 import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.R;
+import com.squareup.picasso.Picasso;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
         View.OnCreateContextMenuListener {
 
     public TextView txt_cartname, txt_cartprice;
-    public ImageView img_cart_count;
+    public ImageView img_cart_count, cart_image;
 
     private ItemClickListener itemClickListener;
 
@@ -39,6 +40,7 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
         txt_cartname = itemView.findViewById(R.id.cart_item_name);
         txt_cartprice = itemView.findViewById(R.id.cart_item_price);
         img_cart_count = itemView.findViewById(R.id.cart_item_count);
+        cart_image = itemView.findViewById(R.id.cart_image);
 
         itemView.setOnCreateContextMenuListener(this);
     }
@@ -75,6 +77,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder cartViewHolder, int i) {
+        Picasso.get()
+                .load(listData.get(i).getImage())
+                .resize(70,70)
+                .centerCrop()
+                .into(cartViewHolder.cart_image);
+
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound("" + listData.get(i).getQuantity(), Color.RED);
         cartViewHolder.img_cart_count.setImageDrawable(drawable);

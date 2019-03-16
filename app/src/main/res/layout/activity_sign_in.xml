@@ -62,6 +62,8 @@
     </LinearLayout>
 
     <Button
+        android:background="#1a75ff"
+        android:textColor="#fff"
         android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

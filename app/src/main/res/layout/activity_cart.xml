@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        app:cardBackgroundColor="@color/colorPrimary">
+        app:cardBackgroundColor="@color/colorAccent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 android:id="@+id/btnPlaceOrder"
                 android:layout_alignParentBottom="true"
                 android:textColor="@android:color/white"
-                android:background="@color/colorAccent"/>
+                android:background="#1a75ff"/>
             
         </RelativeLayout>
 

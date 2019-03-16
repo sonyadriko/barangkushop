@@ -248,7 +248,7 @@ public class Cart extends AppCompatActivity {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     Token serverTokenss = postSnapshot.getValue(Token.class);
 
-                    Notification notifications = new Notification("Barangku", "You have new order" + order_number);
+                    Notification notifications = new Notification("Barangku", "You have new order " + order_number);
                     Sender content = new Sender(serverTokenss.getToken(), notifications);
 
                     mService.sendNotification(content)
@@ -257,10 +257,10 @@ public class Cart extends AppCompatActivity {
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                     if (response.code() == 200) {
                                         if (response.body().succes == 1) {
-                                            Toast.makeText(Cart.this, "Thank you, order place", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(Cart.this, "Thank you, order place :) ", Toast.LENGTH_SHORT).show();
                                             finish();
                                         } else {
-                                            Toast.makeText(Cart.this, "Failed", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(Cart.this, "Thank you, order place :) ", Toast.LENGTH_SHORT).show();
                                             finish();
                                         }
                                     }

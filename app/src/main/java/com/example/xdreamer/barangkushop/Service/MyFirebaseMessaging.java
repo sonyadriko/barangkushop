@@ -1,24 +1,52 @@
 package com.example.xdreamer.barangkushop.Service;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import com.example.xdreamer.barangkushop.Common.Common;
+import com.example.xdreamer.barangkushop.Helper.NotificationHelper;
 import com.example.xdreamer.barangkushop.MainActivity;
+import com.example.xdreamer.barangkushop.OrderStatus;
 import com.example.xdreamer.barangkushop.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Random;
 
 public class MyFirebaseMessaging extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        sendNotification(remoteMessage);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            sendNotificationAPI26(remoteMessage);
+        else
+            sendNotification(remoteMessage);
+    }
+
+    private void sendNotificationAPI26(RemoteMessage remoteMessage) {
+        RemoteMessage.Notification notification = remoteMessage.getNotification();
+        String title = notification.getTitle();
+        String content = notification.getBody();
+
+        Intent intent = new Intent(this, OrderStatus.class);
+        intent.putExtra(Common.PHONE_TEXT, Common.currentUser.getPhone());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
+        Uri defaultUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationHelper helper = new NotificationHelper(this);
+        Notification.Builder builder = helper.getBarangkuShopNotification(title,content,pendingIntent,defaultUri);
+
+        helper.getManager().notify(new Random().nextInt(),builder.build());
+
     }
 
     private void sendNotification(RemoteMessage remoteMessage) {

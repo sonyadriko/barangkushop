@@ -22,7 +22,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.example.xdreamer.barangkushop.Common.Common;
+import com.example.xdreamer.barangkushop.Database.Database;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
 import com.example.xdreamer.barangkushop.Object.Category;
 import com.example.xdreamer.barangkushop.Object.Token;
@@ -47,7 +49,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     private FirebaseDatabase database;
     private DatabaseReference category;
 
-    private FloatingActionButton fab;
+    private CounterFab fab;
 
     private TextView txtname;
 
@@ -109,9 +111,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fab =
-
-                findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +119,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 startActivity(cart);
             }
         });
+
+        fab.setCount(new Database(this).getCountCart());
 
         View headerView = navigationView.getHeaderView(0);
         txtname = headerView.findViewById(R.id.txtFullName);
@@ -178,6 +180,17 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         };
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fab.setCount(new Database(this).getCountCart());
+
+
+        if (adapter != null)
+            adapter.startListening();
+
     }
 
     @Override

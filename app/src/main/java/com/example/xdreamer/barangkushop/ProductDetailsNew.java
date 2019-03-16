@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Database.Database;
@@ -36,7 +37,8 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
     TextView product_nama, product_price, product_desc;
     ImageView productimage;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    FloatingActionButton floatingActionButton, btnRating;
+    FloatingActionButton btnRating;
+    CounterFab floatingActionButton;
     ElegantNumberButton elegantNumberButton;
 
     RatingBar ratingBar;
@@ -77,12 +79,15 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
                         currentProducts.getName(),
                         elegantNumberButton.getNumber(),
                         currentProducts.getPrice(),
-                        currentProducts.getDiscount()
+                        currentProducts.getDiscount(),
+                        currentProducts.getImage()
                 ));
 
                 Toast.makeText(ProductDetailsNew.this, "Added To Cart", Toast.LENGTH_SHORT).show();
             }
         });
+
+        floatingActionButton.setCount(new Database(this).getCountCart());
 
         btnRating.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Database.Database;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
+import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.Object.Products;
 import com.example.xdreamer.barangkushop.ViewHolder.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -113,28 +113,20 @@ public class ProductList extends AppCompatActivity {
             @Override
             protected void populateViewHolder(final ProductViewHolder viewHolder, final Products model, final int position) {
                 viewHolder.product_name.setText(model.getName());
-               // viewHolder.product_price.setText(String.format("Rp. "+model.getPrice()));
+                viewHolder.product_price.setText(String.format("Rp. "+model.getPrice()));
                 Picasso.get()
                         .load(model.getImage())
                         .into(viewHolder.product_image);
 
-                final Products local = model;
-                viewHolder.setItemClickListener(new ItemClickListener() {
-                    @Override
-                    public void OnClick(View view, int position, boolean isLongClick) {
-                        Intent details = new Intent(ProductList.this, ProductDetailsNew.class);
-                        details.putExtra("productId", adapter.getRef(position).getKey());
-                        startActivity(details);
-                    }
-                });
-
-              /*  if (localDB.HasisFavorite(adapter.getRef(position).getKey()))
-                    viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
-
+                //Fitur Favorite Product :)))
+                /*if (localDB.isFavorite(adapter.getRef(position).getKey())) {
+                    viewHolder.fav_image.setImageResource(R.drawable.ic_games_black_24dp);
+                }
                 viewHolder.fav_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!localDB.HasisFavorite(adapter.getRef(position).getKey())) {
+                        if (!localDB.isFavorite(adapter.getRef(position).getKey()))
+                        {
                             localDB.addToFavorites(adapter.getRef(position).getKey());
                             viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
                             Toast.makeText(ProductList.this, "" + model.getName() + " was added to Favorites", Toast.LENGTH_SHORT).show();
@@ -146,10 +138,45 @@ public class ProductList extends AppCompatActivity {
                     }
                 });
                 */
+
+                viewHolder.quick_cart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            new Database(getBaseContext()).addToCart(new Order(
+                                    adapter.getRef(position).getKey(),
+                                    model.getName(),
+                                    "1",
+                                    model.getPrice(),
+                                    model.getDiscount(),
+                                    model.getImage()
+                            ));
+
+                            Toast.makeText(ProductList.this, "Added To Cart", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                final Products local = model;
+                viewHolder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void OnClick(View view, int position, boolean isLongClick) {
+                        Intent details = new Intent(ProductList.this, ProductDetailsNew.class);
+                        details.putExtra("productId", adapter.getRef(position).getKey());
+                        startActivity(details);
+                    }
+                });
+
+
             }
         };
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adapter != null)
+            adapter.startListening();
     }
 }
