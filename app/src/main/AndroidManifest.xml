@@ -12,9 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Payment"></activity>
-
-        <!--<service
+        <activity android:name=".FavoritesActivity"></activity>
+        <activity android:name=".Payment" />
+        <!--
+<service
             android:name="com.paypal.android.sdk.payments.PayPalService"
             android:exported="false" />
 
@@ -22,7 +23,6 @@
         <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
         <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
         <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
-
         -->
         <activity android:name=".ForgotPassword" />
         <activity android:name=".OrderStatus" />

@@ -312,6 +312,7 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
 
     }
 
+    /*
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle().equals(Common.DELETE)) {
@@ -319,6 +320,8 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
         }
         return super.onContextItemSelected(item);
     }
+
+    */
 
     private void deleteCart(int order) {
 

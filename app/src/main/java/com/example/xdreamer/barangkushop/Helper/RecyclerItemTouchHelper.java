@@ -7,8 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import com.example.xdreamer.barangkushop.Cart;
 import com.example.xdreamer.barangkushop.Interface.RecyclerItemTouchHelperListener;
+import com.example.xdreamer.barangkushop.Object.Favorites;
 import com.example.xdreamer.barangkushop.ViewHolder.CartViewHolder;
+import com.example.xdreamer.barangkushop.ViewHolder.FavoritesViewHolder;
 
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
@@ -37,29 +40,50 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        View foreground = ((CartViewHolder)viewHolder).view_foreground;
-        getDefaultUIUtil().clearView(foreground);
+        if (viewHolder instanceof CartViewHolder) {
+            View foreground = ((CartViewHolder) viewHolder).view_foreground;
+            getDefaultUIUtil().clearView(foreground);
+        } else if(viewHolder instanceof FavoritesViewHolder) {
+            View foreground = ((FavoritesViewHolder) viewHolder).view_foreground;
+            getDefaultUIUtil().clearView(foreground);
+        }
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View foregroundView = ((CartViewHolder)viewHolder).view_foreground;
-        getDefaultUIUtil().onDraw(c,recyclerView,foregroundView,dX,dY,actionState,isCurrentlyActive);
+        if (viewHolder instanceof CartViewHolder) {
+            View foregroundView = ((CartViewHolder) viewHolder).view_foreground;
+            getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
+        } else if (viewHolder instanceof FavoritesViewHolder){
+            View foregroundView = ((FavoritesViewHolder) viewHolder).view_foreground;
+            getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
+        }
     }
 
 
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         if (viewHolder != null){
-            View foreground = ((CartViewHolder)viewHolder).view_foreground;
-            getDefaultUIUtil().onSelected(foreground);
+            if (viewHolder instanceof CartViewHolder){
+                View foreground = ((CartViewHolder)viewHolder).view_foreground;
+                getDefaultUIUtil().onSelected(foreground);
+            } else if (viewHolder instanceof FavoritesViewHolder) {
+                View foreground = ((FavoritesViewHolder)viewHolder).view_foreground;
+                getDefaultUIUtil().onSelected(foreground);
+            }
+
         }
     }
 
     @Override
     public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View foreground = ((CartViewHolder)viewHolder).view_foreground;
-        getDefaultUIUtil().onDrawOver(c,recyclerView,foreground,dX,dY,actionState,isCurrentlyActive);
+        if (viewHolder instanceof CartViewHolder) {
+            View foreground = ((CartViewHolder) viewHolder).view_foreground;
+            getDefaultUIUtil().onDrawOver(c, recyclerView, foreground, dX, dY, actionState, isCurrentlyActive);
+        } else if (viewHolder instanceof FavoritesViewHolder){
+            View foreground = ((FavoritesViewHolder) viewHolder).view_foreground;
+            getDefaultUIUtil().onDrawOver(c, recyclerView, foreground, dX, dY, actionState, isCurrentlyActive);
+        }
     }
 
 

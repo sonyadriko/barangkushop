@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
+import com.example.xdreamer.barangkushop.Object.Favorites;
 import com.example.xdreamer.barangkushop.Object.Order;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -87,21 +88,31 @@ public class Database extends SQLiteAssetHelper {
         db.execSQL(query);
     }
 
-    public void addToFavorites(String productId) {
+    public void addToFavorites(Favorites product) {
         SQLiteDatabase db = getReadableDatabase();
-        String queryes = String.format("INSERT INTO Favorites(FoodId) VALUES('%s');", productId);
+        String queryes = String.format("INSERT INTO Favorites(" +
+                "ProductId,ProductName,ProductPrice,ProductMenuId,ProductImage,ProductDiscount,ProductDescription,UserPhone) " +
+                "VALUES('%s','%s','%s','%s','%s','%s','%s','%s');",
+                product.getProductId(),
+                product.getProductName(),
+                product.getProductPrice(),
+                product.getProductMenuId(),
+                product.getProductImage(),
+                product.getProductDiscount(),
+                product.getProductDescription(),
+                product.getUserPhone());
         db.execSQL(queryes);
     }
 
-    public void removeFromFavorites(String productId) {
+    public void removeFromFavorites(String productId, String userPhone) {
         SQLiteDatabase db = getReadableDatabase();
-        String queryes = String.format("DELETE FROM Favorites WHERE FoodId='%s';", productId);
+        String queryes = String.format("DELETE FROM Favorites WHERE UserPhone='%s' AND ProductId='%s';", userPhone,productId);
         db.execSQL(queryes);
     }
 
     public boolean isFavorite(String productId) {
         SQLiteDatabase db = getReadableDatabase();
-        String queryess = String.format("SELECT * FROM Favorites WHERE FoodId='%s';", productId);
+        String queryess = String.format("SELECT * FROM Favorites WHERE ProductId='%s';", productId);
         Cursor cursor = db.rawQuery(queryess, null);
         if (cursor.getCount() <= 0) {
             cursor.close();
@@ -109,6 +120,34 @@ public class Database extends SQLiteAssetHelper {
         }
         cursor.close();
         return true;
+    }
+
+    public List<Favorites> getAllFavorites(String userPhone) {
+        SQLiteDatabase db = getReadableDatabase();
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+
+        String[] sqlselect = {"UserPhone","ProductId","ProductName","ProductPrice","ProductMenuId","ProductImage","ProductDiscount","ProductDescription"};
+        String sqltable = "Favorites";
+
+        queryBuilder.setTables(sqltable);
+        Cursor c = queryBuilder.query(db, sqlselect, "UserPhone=?", new String[]{userPhone}, null, null, null);
+
+        final List<Favorites> result = new ArrayList<>();
+        if (c.moveToFirst()) {
+            do {
+                result.add(new Favorites(
+                        c.getString(c.getColumnIndex("ProductId")),
+                        c.getString(c.getColumnIndex("ProductName")),
+                        c.getString(c.getColumnIndex("ProductPrice")),
+                        c.getString(c.getColumnIndex("ProductMenuId")),
+                        c.getString(c.getColumnIndex("ProductImage")),
+                        c.getString(c.getColumnIndex("ProductDiscount")),
+                        c.getString(c.getColumnIndex("ProductDescription")),
+                        c.getString(c.getColumnIndex("UserPhone"))
+                        ));
+            } while (c.moveToNext());
+        }
+        return result;
     }
 
     public int getCountCart(String userPhone) {

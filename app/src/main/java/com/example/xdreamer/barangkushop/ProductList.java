@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Database.Database;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
+import com.example.xdreamer.barangkushop.Object.Favorites;
 import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.Object.Products;
 import com.example.xdreamer.barangkushop.ViewHolder.ProductViewHolder;
@@ -125,13 +126,23 @@ public class ProductList extends AppCompatActivity {
                 viewHolder.fav_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!localDB.isFavorite(adapter.getRef(position).getKey()))
-                        {
-                            localDB.addToFavorites(adapter.getRef(position).getKey());
+
+                        Favorites favorites = new Favorites();
+                        favorites.setProductId(adapter.getRef(position).getKey());
+                        favorites.setProductName(model.getName());
+                        favorites.setProductPrice(model.getPrice());
+                        favorites.setProductDescription(model.getDescription());
+                        favorites.setProductDiscount(model.getDiscount());
+                        favorites.setProductImage(model.getImage());
+                        favorites.setProductMenuId(model.getMenuId());
+                        favorites.setUserPhone(Common.currentUser.getPhone());
+
+                        if (!localDB.isFavorite(adapter.getRef(position).getKey())) {
+                            localDB.addToFavorites(favorites);
                             viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
                             Toast.makeText(ProductList.this, "" + model.getName() + " was added to Favorites", Toast.LENGTH_SHORT).show();
                         } else {
-                            localDB.removeFromFavorites(adapter.getRef(position).getKey());
+                            localDB.removeFromFavorites(adapter.getRef(position).getKey(),Common.currentUser.getPhone());
                             viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                             Toast.makeText(ProductList.this, "" + model.getName() + " was removed from Favorites", Toast.LENGTH_SHORT).show();
                         }
@@ -162,27 +173,25 @@ public class ProductList extends AppCompatActivity {
                     }
                 });
 
-            final Products local = model;
-                viewHolder.setItemClickListener(new
-
-            ItemClickListener() {
-                @Override
-                public void OnClick (View view,int position, boolean isLongClick){
-                    Intent details = new Intent(ProductList.this, ProductDetailsNew.class);
-                    details.putExtra("productId", adapter.getRef(position).getKey());
-                    startActivity(details);
-                }
-            });
+                final Products local = model;
+                viewHolder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void OnClick(View view, int position, boolean isLongClick) {
+                        Intent details = new Intent(ProductList.this, ProductDetailsNew.class);
+                        details.putExtra("productId", adapter.getRef(position).getKey());
+                        startActivity(details);
+                    }
+                });
 
 
+            }
         }
-    }
 
-    ;
+        ;
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
 
-}
+    }
 
     @Override
     protected void onResume() {

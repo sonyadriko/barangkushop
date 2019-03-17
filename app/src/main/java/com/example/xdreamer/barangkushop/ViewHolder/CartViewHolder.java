@@ -13,8 +13,7 @@ import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
 import com.example.xdreamer.barangkushop.R;
 
-public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
-        View.OnCreateContextMenuListener {
+public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     public TextView txt_cartname, txt_cartprice;
     public ImageView img_cart_count, cart_image;
@@ -38,7 +37,6 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         view_background = itemView.findViewById(R.id.view_background);
         view_foreground = itemView.findViewById(R.id.view_foreground);
 
-        itemView.setOnCreateContextMenuListener(this);
     }
 
     @Override
@@ -46,9 +44,4 @@ public class CartViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        menu.setHeaderTitle("Select action");
-        menu.add(0,0,getAdapterPosition(), Common.DELETE);
-    }
 }
