@@ -2,24 +2,30 @@ package com.example.xdreamer.barangkushop;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Common.Config;
 import com.example.xdreamer.barangkushop.Database.Database;
+import com.example.xdreamer.barangkushop.Helper.RecyclerItemTouchHelper;
+import com.example.xdreamer.barangkushop.Interface.RecyclerItemTouchHelperListener;
 import com.example.xdreamer.barangkushop.Object.MyResponse;
 import com.example.xdreamer.barangkushop.Object.Notification;
 import com.example.xdreamer.barangkushop.Object.Order;
@@ -28,6 +34,7 @@ import com.example.xdreamer.barangkushop.Object.Sender;
 import com.example.xdreamer.barangkushop.Object.Token;
 import com.example.xdreamer.barangkushop.Remote.APIService;
 import com.example.xdreamer.barangkushop.ViewHolder.CartAdapter;
+import com.example.xdreamer.barangkushop.ViewHolder.CartViewHolder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,7 +52,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Cart extends AppCompatActivity {
+public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperListener {
 
     private static final int PAYPAL_REQUEST_CODE = 9999;
 
@@ -54,6 +61,8 @@ public class Cart extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference requests;
+
+    RelativeLayout rootLayout;
 
     TextView totalPrice;
     Button placeOrder;
@@ -77,7 +86,9 @@ public class Cart extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Request");
 
-        //ini paypal
+        rootLayout = findViewById(R.id.rootLayout);
+
+        //active paypal
         //Intent intpay = new Intent(this, PayPalService.class);
         //intpay.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         //startService(intpay);
@@ -88,6 +99,10 @@ public class Cart extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        //swipe to delete
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new RecyclerItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
 
         totalPrice = findViewById(R.id.totalprice);
         placeOrder = findViewById(R.id.btnPlaceOrder);
@@ -162,7 +177,7 @@ public class Cart extends AppCompatActivity {
                 String order_number = String.valueOf(System.currentTimeMillis());
                 requests.child(order_number).setValue(request);
 
-                new Database(getBaseContext()).cleanCart();
+                new Database(getBaseContext()).cleanCart(Common.currentUser.getPhone());
 
                 sendNotificationOrder(order_number);
                 // Toast.makeText(Cart.this, "Thank You, Order place", Toast.LENGTH_SHORT).show();
@@ -282,7 +297,7 @@ public class Cart extends AppCompatActivity {
     }
 
     private void loadListFood() {
-        cart = new Database(this).getCarts();
+        cart = new Database(this).getCarts(Common.currentUser.getPhone());
         adapter = new CartAdapter(cart, this);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
@@ -309,11 +324,60 @@ public class Cart extends AppCompatActivity {
 
         cart.remove(order);
 
-        new Database(this).cleanCart();
+        new Database(this).cleanCart(Common.currentUser.getPhone());
 
         for (Order item : cart) {
             new Database(this).addToCart(item);
         }
         loadListFood();
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof CartViewHolder){
+            String name = ((CartAdapter)recyclerView.getAdapter()).getItem(viewHolder.getAdapterPosition()).getProductName();
+
+            final Order deleteItem = ((CartAdapter)recyclerView.getAdapter()).getItem(viewHolder.getAdapterPosition());
+
+            final int deleteIndex = viewHolder.getAdapterPosition();
+
+            adapter.removeItem(deleteIndex);
+            new Database(getBaseContext()).removeFromCart(deleteItem.getProductId(),Common.currentUser.getPhone());
+
+            int total = 0;
+            List<Order> orders = new Database(getBaseContext()).getCarts(Common.currentUser.getPhone());
+            for (Order item : orders)
+                total += (Integer.parseInt(item.getPrice())) * (Integer.parseInt(item.getQuantity()));
+            Locale locale = new Locale("id","ID");
+            NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+
+            totalPrice.setText(fmt.format(total));
+
+            Snackbar snackbar = Snackbar.make(rootLayout,name +  " removed from cart",Snackbar.LENGTH_SHORT);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    adapter.restoreItem(deleteItem,deleteIndex);
+                    new Database(getBaseContext()).addToCart(deleteItem);
+
+                    int total = 0;
+                    List<Order> orders = new Database(getBaseContext()).getCarts(Common.currentUser.getPhone());
+                    for (Order item : orders)
+                        total += (Integer.parseInt(item.getPrice())) * (Integer.parseInt(item.getQuantity()));
+                    Locale locale = new Locale("id","ID");
+                    NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+
+                    totalPrice.setText(fmt.format(total));
+
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

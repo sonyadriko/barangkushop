@@ -113,14 +113,14 @@ public class ProductList extends AppCompatActivity {
             @Override
             protected void populateViewHolder(final ProductViewHolder viewHolder, final Products model, final int position) {
                 viewHolder.product_name.setText(model.getName());
-                viewHolder.product_price.setText(String.format("Rp. "+model.getPrice()));
+                viewHolder.product_price.setText(String.format("Rp. " + model.getPrice()));
                 Picasso.get()
                         .load(model.getImage())
                         .into(viewHolder.product_image);
 
                 //Fitur Favorite Product :)))
-                /*if (localDB.isFavorite(adapter.getRef(position).getKey())) {
-                    viewHolder.fav_image.setImageResource(R.drawable.ic_games_black_24dp);
+                if (localDB.isFavorite(adapter.getRef(position).getKey())) {
+                    viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                 }
                 viewHolder.fav_image.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -132,17 +132,21 @@ public class ProductList extends AppCompatActivity {
                             Toast.makeText(ProductList.this, "" + model.getName() + " was added to Favorites", Toast.LENGTH_SHORT).show();
                         } else {
                             localDB.removeFromFavorites(adapter.getRef(position).getKey());
-                            viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_black_24dp);
+                            viewHolder.fav_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                             Toast.makeText(ProductList.this, "" + model.getName() + " was removed from Favorites", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-                */
+
+                final boolean isExists = new Database(getBaseContext()).checkProductExists(adapter.getRef(position).getKey(), Common.currentUser.getPhone());
 
                 viewHolder.quick_cart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        if (!isExists) {
                             new Database(getBaseContext()).addToCart(new Order(
+                                    Common.currentUser.getPhone(),
                                     adapter.getRef(position).getKey(),
                                     model.getName(),
                                     "1",
@@ -150,28 +154,35 @@ public class ProductList extends AppCompatActivity {
                                     model.getDiscount(),
                                     model.getImage()
                             ));
+                        } else {
+                            new Database(getBaseContext()).increaseCart(Common.currentUser.getPhone(), adapter.getRef(position).getKey());
+                        }
 
-                            Toast.makeText(ProductList.this, "Added To Cart", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductList.this, "Added To Cart", Toast.LENGTH_SHORT).show();
                     }
                 });
 
-                final Products local = model;
-                viewHolder.setItemClickListener(new ItemClickListener() {
-                    @Override
-                    public void OnClick(View view, int position, boolean isLongClick) {
-                        Intent details = new Intent(ProductList.this, ProductDetailsNew.class);
-                        details.putExtra("productId", adapter.getRef(position).getKey());
-                        startActivity(details);
-                    }
-                });
+            final Products local = model;
+                viewHolder.setItemClickListener(new
+
+            ItemClickListener() {
+                @Override
+                public void OnClick (View view,int position, boolean isLongClick){
+                    Intent details = new Intent(ProductList.this, ProductDetailsNew.class);
+                    details.putExtra("productId", adapter.getRef(position).getKey());
+                    startActivity(details);
+                }
+            });
 
 
-            }
-        };
+        }
+    }
+
+    ;
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
 
-    }
+}
 
     @Override
     protected void onResume() {

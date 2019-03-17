@@ -5,4 +5,8 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="OverlayBackground">#d1e0e0</color>
+    
+    <color name="bgRowBackground">#FA315B</color>
+
+    <color name="mainColor">#1a75ff</color>
 </resources>

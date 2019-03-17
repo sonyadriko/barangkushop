@@ -75,6 +75,7 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
             @Override
             public void onClick(View v) {
                 new Database(getBaseContext()).addToCart(new Order(
+                        Common.currentUser.getPhone(),
                         productId,
                         currentProducts.getName(),
                         elegantNumberButton.getNumber(),
@@ -87,7 +88,7 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
             }
         });
 
-        floatingActionButton.setCount(new Database(this).getCountCart());
+        floatingActionButton.setCount(new Database(this).getCountCart(Common.currentUser.getPhone()));
 
         btnRating.setOnClickListener(new View.OnClickListener() {
             @Override

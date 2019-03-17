@@ -1,10 +1,12 @@
 package com.example.xdreamer.barangkushop.Object;
 
 public class Order {
+    private String UserPhone;
     private String ProductId, ProductName, Quantity, Price, Discount;
     private String Image;
 
-    public Order(String productId, String productName, String quantity, String price, String discount, String image) {
+    public Order(String userPhone, String productId, String productName, String quantity, String price, String discount, String image) {
+        UserPhone = userPhone;
         ProductId = productId;
         ProductName = productName;
         Quantity = quantity;
@@ -13,20 +15,15 @@ public class Order {
         Image = image;
     }
 
-    public Order(String productId, String productName, String quantity, String price, String discount) {
-        ProductId = productId;
-        ProductName = productName;
-        Quantity = quantity;
-        Price = price;
-        Discount = discount;
+    public Order() {
     }
 
-    public String getImage() {
-        return Image;
+    public String getUserPhone() {
+        return UserPhone;
     }
 
-    public void setImage(String image) {
-        Image = image;
+    public void setUserPhone(String userPhone) {
+        UserPhone = userPhone;
     }
 
     public String getProductId() {
@@ -67,5 +64,13 @@ public class Order {
 
     public void setDiscount(String discount) {
         Discount = discount;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
     }
 }

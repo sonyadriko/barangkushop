@@ -30,6 +30,8 @@
                 android:textAllCaps="true"
                 android:textStyle="bold" />
 
+
+
             <TextView
                 android:id="@+id/order_status"
                 android:layout_width="wrap_content"
