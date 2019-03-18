@@ -1,11 +1,13 @@
 package com.example.xdreamer.barangkushop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -51,6 +53,8 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
 
     Products currentProducts;
 
+    Button showComment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +67,16 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
         elegantNumberButton = findViewById(R.id.number_buttonnew);
         floatingActionButton = findViewById(R.id.btn_cartnew);
         btnRating = findViewById(R.id.btn_rating);
+
+        showComment = findViewById(R.id.btnShowComment);
+        showComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductDetailsNew.this, ShowComments.class);
+                intent.putExtra(Common.INTENT_PRODUCT_ID,productId);
+                startActivity(intent);
+            }
+        });
 
         product_nama = findViewById(R.id.product_namedetailnew);
         product_price = findViewById(R.id.product_pricedetailnew);
@@ -120,18 +134,16 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
         Query foodRating = ratingTbl.orderByChild("productId").equalTo(productId);
 
         foodRating.addValueEventListener(new ValueEventListener() {
-            int count = 0, sum = 0;
-
+            int count=0,sum=0;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Rating item = dataSnapshot.getValue(Rating.class);
-                    sum += Integer.parseInt(item.getRateValue());
+                for (DataSnapshot postSnapshot:dataSnapshot.getChildren()) {
+                    Rating item = postSnapshot.getValue(Rating.class);
+                    sum+= Integer.parseInt(item.getRateValue());
                     count++;
                 }
-
                 if (count != 0) {
-                    float average = sum / count;
+                    float average = sum/count;
                     ratingBar.setRating(average);
                 }
             }
@@ -194,11 +206,11 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
     }
 
     @Override
-    public void onPositiveButtonClicked(int i, @NotNull String s) {
+    public void onPositiveButtonClicked(int i, @NotNull String comments) {
         final Rating rating = new Rating(Common.currentUser.getPhone(),
                 productId,
                 String.valueOf(i),
-                s);
+                comments);
         ratingTbl.child(Common.currentUser.getPhone()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

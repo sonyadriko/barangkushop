@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/white"
         android:elevation="6dp"
-        android:src="@drawable/ic_shopping_cart_black_24dp"
+        android:src="@drawable/ic_add_shopping_cart_black_24dp"
         app:layout_anchor="@id/appbarlayoutnew"
         app:layout_anchorGravity="bottom|right|end"
         app:pressedTranslationZ="12dp"
@@ -167,12 +167,12 @@
                     android:orientation="vertical">
 
                     <RatingBar
+                        android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:isIndicator="true"
                         android:max="5"
-                        android:rating="0"
-                        android:id="@+id/ratingBar"/>
+                        android:rating="0" />
 
                     <TextView
                         android:id="@+id/product_descriptionnew"
@@ -187,6 +187,14 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show Comments"
+                android:textColor="@android:color/white"
+                android:background="@color/mainColor"
+                android:id="@+id/btnShowComment"/>
 
         </LinearLayout>
 

@@ -124,10 +124,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         View headerView = navigationView.getHeaderView(0);
         txtname = headerView.findViewById(R.id.txtFullName);
+        txtname.setText(Common.currentUser.getName());
 
-        recyclerView =
-
-                findViewById(R.id.recycler_menu);
+        recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);

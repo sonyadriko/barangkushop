@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="#1a75ff"
+            android:background="#fff"
             android:orientation="horizontal"
             android:weightSum="10">
 
@@ -38,7 +38,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="JUDUL JUALAN"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="24dp" />
 
             <ImageView
@@ -48,7 +48,7 @@
                 android:layout_weight="1"
                 android:padding="4dp"
                 android:src="@drawable/ic_favorite_border_black_24dp"
-                android:tint="@android:color/white"></ImageView>
+                android:tint="@android:color/black"></ImageView>
         </LinearLayout>
 
         <RelativeLayout
@@ -61,6 +61,7 @@
                 android:id="@+id/product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_red_dark"
                 android:layout_margin="10dp"
                 android:text="Rp.100000"
                 android:textSize="20dp" />
@@ -72,7 +73,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:src="@drawable/ic_shopping_cart_black_24dp"
+                android:src="@drawable/ic_add_shopping_cart_black_24dp"
                 android:tint="@color/colorAccent" />
 
         </RelativeLayout>

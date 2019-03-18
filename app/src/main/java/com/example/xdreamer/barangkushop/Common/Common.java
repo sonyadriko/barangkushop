@@ -16,6 +16,8 @@ public class Common {
 
     public static String PHONE_TEXT = "userPhone";
 
+    public static final String INTENT_PRODUCT_ID = "ProductId";
+
     private static final String BASE_URL = "https://fcm.googleapis.com/";
 
     public static APIService getFCMService() {

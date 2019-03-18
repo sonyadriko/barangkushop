@@ -1,11 +1,13 @@
 package com.example.xdreamer.barangkushop;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.xdreamer.barangkushop.Common.Common;
@@ -22,10 +24,19 @@ public class MainActivity extends AppCompatActivity {
 
     private Button signin, signup;
 
+    private TextView nameApp, sloganApp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        nameApp = findViewById(R.id.nameappmain);
+        sloganApp = findViewById(R.id.textSlogan);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/TaxiDriver.ttf");
+        Typeface typeface1 = Typeface.createFromAsset(getAssets(), "fonts/MarvelousSans.otf");
+        sloganApp.setTypeface(typeface);
+        nameApp.setTypeface(typeface1);
 
         signin = findViewById(R.id.buttonsignin);
         signup = findViewById(R.id.buttonsignup);

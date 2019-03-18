@@ -93,7 +93,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="30dp"
-                android:src="@drawable/ic_shopping_cart_black_24dp"
+                android:src="@drawable/ic_add_shopping_cart_black_24dp"
                 android:tint="@color/colorAccent" />
 
         </RelativeLayout>

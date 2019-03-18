@@ -8,9 +8,53 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:140012703897:android:8a9a296da770355e",
+        "mobilesdk_app_id": "1:140012703897:android:20af67a51aae0000",
         "android_client_info": {
-          "package_name": "com.example.xdreamer.barangkushop"
+          "package_name": "com.example.barangkushopserver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140012703897-s77lp3koi5o21drege631v276of3nt14.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.barangkushopserver",
+            "certificate_hash": "1078837cc73a23a1e9939fb404a35236fdfb85cc"
+          }
+        },
+        {
+          "client_id": "140012703897-lkujdn0t31oa98dv1vasjqu3qebstub3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC654-9Exey0JTqMSK5twIw0NJyoTUe-Yc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140012703897-lkujdn0t31oa98dv1vasjqu3qebstub3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140012703897:android:5f403c49618d5f38",
+        "android_client_info": {
+          "package_name": "com.example.barangkushopserverhome"
         }
       },
       "oauth_client": [
@@ -31,6 +75,50 @@
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140012703897:android:8a9a296da770355e",
+        "android_client_info": {
+          "package_name": "com.example.xdreamer.barangkushop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140012703897-dno6fhok7ul4m8mif33o9ni3pmt2it96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.xdreamer.barangkushop",
+            "certificate_hash": "1078837cc73a23a1e9939fb404a35236fdfb85cc"
+          }
+        },
+        {
+          "client_id": "140012703897-lkujdn0t31oa98dv1vasjqu3qebstub3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC654-9Exey0JTqMSK5twIw0NJyoTUe-Yc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140012703897-lkujdn0t31oa98dv1vasjqu3qebstub3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
