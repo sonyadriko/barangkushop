@@ -5,7 +5,7 @@
 
         <item
             android:id="@+id/nav_menu"
-            android:icon="@drawable/ic_games_black_24dp"
+            android:icon="@drawable/ic_menu_black_24dp"
             android:iconTint="@android:color/white"
             android:title="Menu" />
         <item
@@ -20,7 +20,7 @@
             android:title="Cart" />
         <item
             android:id="@+id/nav_orders"
-            android:icon="@drawable/ic_games_black_24dp"
+            android:icon="@drawable/ic_order_black_24dp"
             android:iconTint="@android:color/white"
             android:title="Orders" />
         <item
@@ -30,7 +30,7 @@
             android:title="Change Password" />
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_games_black_24dp"
+            android:icon="@drawable/ic_logout_black_24dp"
             android:iconTint="@android:color/white"
             android:title="Logout" />
 

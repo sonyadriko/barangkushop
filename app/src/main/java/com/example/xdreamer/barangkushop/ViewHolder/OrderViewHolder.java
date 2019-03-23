@@ -1,7 +1,7 @@
 package com.example.xdreamer.barangkushop.ViewHolder;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,7 +10,7 @@ import com.example.xdreamer.barangkushop.R;
 
 public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView txtOrderId, txtOrderStatus, txtOrderPhone, txtOrderAddress;
+    public TextView txtOrderId, txtOrderStatus, txtOrderPhone, txtOrderIdgame, txtOrderContact, txtOrderDate;
 
     private ItemClickListener itemClickListener;
 
@@ -18,11 +18,13 @@ public class OrderViewHolder extends RecyclerView.ViewHolder implements View.OnC
         super(itemView);
 
         txtOrderId = itemView.findViewById(R.id.order_id);
+        txtOrderDate = itemView.findViewById(R.id.order_date);
         txtOrderStatus = itemView.findViewById(R.id.order_status);
-        txtOrderPhone = itemView.findViewById(R.id.order_status);
-        txtOrderAddress = itemView.findViewById(R.id.order_address);
+        txtOrderPhone = itemView.findViewById(R.id.order_phone);
+        txtOrderIdgame = itemView.findViewById(R.id.order_idgame);
+        txtOrderContact = itemView.findViewById(R.id.order_contact);
 
-        itemView.setOnClickListener(this);
+        //itemView.setOnClickListener(this);
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {

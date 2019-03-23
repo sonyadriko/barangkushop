@@ -2,10 +2,10 @@ package com.example.xdreamer.barangkushop;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +20,8 @@ import com.example.xdreamer.barangkushop.Database.Database;
 import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.Object.Products;
 import com.example.xdreamer.barangkushop.Object.Rating;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -206,11 +208,21 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
     }
 
     @Override
-    public void onPositiveButtonClicked(int i, @NotNull String comments) {
+    public void onPositiveButtonClicked(int value, @NotNull String comments) {
         final Rating rating = new Rating(Common.currentUser.getPhone(),
                 productId,
-                String.valueOf(i),
+                String.valueOf(value),
                 comments);
+
+        ratingTbl.push()
+                .setValue(rating)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(ProductDetailsNew.this, "Thank you for submit rating ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        /*
         ratingTbl.child(Common.currentUser.getPhone()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -230,7 +242,9 @@ public class ProductDetailsNew extends AppCompatActivity implements RatingDialog
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
         });
+        */
 
     }
 

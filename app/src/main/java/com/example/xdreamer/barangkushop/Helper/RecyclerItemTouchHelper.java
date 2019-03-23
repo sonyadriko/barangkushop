@@ -1,15 +1,13 @@
 package com.example.xdreamer.barangkushop.Helper;
 
 import android.graphics.Canvas;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
 
-import com.example.xdreamer.barangkushop.Cart;
 import com.example.xdreamer.barangkushop.Interface.RecyclerItemTouchHelperListener;
-import com.example.xdreamer.barangkushop.Object.Favorites;
 import com.example.xdreamer.barangkushop.ViewHolder.CartViewHolder;
 import com.example.xdreamer.barangkushop.ViewHolder.FavoritesViewHolder;
 

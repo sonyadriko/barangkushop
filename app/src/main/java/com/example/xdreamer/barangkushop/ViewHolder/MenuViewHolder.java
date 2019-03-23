@@ -1,7 +1,7 @@
 package com.example.xdreamer.barangkushop.ViewHolder;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +19,7 @@ public class MenuViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public MenuViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        txtMenuName = itemView.findViewById(R.id.menu_name);
+        //txtMenuName = itemView.findViewById(R.id.menu_name);
         imageView = itemView.findViewById(R.id.menu_image);
 
         itemView.setOnClickListener(this);

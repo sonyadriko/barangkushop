@@ -2,22 +2,24 @@ package com.example.xdreamer.barangkushop;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.audiofx.DynamicsProcessing;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ import com.example.xdreamer.barangkushop.Object.Category;
 import com.example.xdreamer.barangkushop.Object.Token;
 import com.example.xdreamer.barangkushop.ViewHolder.MenuViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -59,6 +62,8 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     FirebaseRecyclerAdapter<Category, MenuViewHolder> adapter;
 
     SwipeRefreshLayout swipeRefreshLayout;
+
+
 
     @Override
 
@@ -124,7 +129,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         View headerView = navigationView.getHeaderView(0);
         txtname = headerView.findViewById(R.id.txtFullName);
-        txtname.setText(Common.currentUser.getName());
+        txtname.setText("Hello " + Common.currentUser.getName());
 
         recyclerView = findViewById(R.id.recycler_menu);
         recyclerView.setHasFixedSize(true);
@@ -153,32 +158,56 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference tokens = db.getReference("Tokens");
-        Token data = new Token(token, false);
+        Token data = new Token(token, false); //false : token send from client app
         tokens.child(Common.currentUser.getPhone()).setValue(data);
         }
     }
 
+
+
     private void loadMenu() {
-        adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(Category.class, R.layout.menu_item, MenuViewHolder.class, category) {
+
+        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Category>()
+                .setQuery(category,Category.class)
+                .build();
+
+        adapter = new FirebaseRecyclerAdapter<Category, MenuViewHolder>(options) {
+
+            @NonNull
             @Override
-            protected void populateViewHolder(MenuViewHolder viewHolder, Category model, int position) {
-                viewHolder.txtMenuName.setText(model.getName());
+            public MenuViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View itemView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.menu_item,viewGroup,false);
+                return new MenuViewHolder(itemView);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull MenuViewHolder viewHolder, int position, @NonNull Category model) {
+               // viewHolder.txtMenuName.setText(model.getName());
                 Picasso.get()
                         .load(model.getImage())
                         .into(viewHolder.imageView);
-                final Category clickitem = model;
+                final Category clickhere = model;
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void OnClick(View view, int position, boolean isLongClick) {
-                        Intent productlist = new Intent(Home.this, ProductList.class);
-                        productlist.putExtra("CategoryId", adapter.getRef(position).getKey());
-                        startActivity(productlist);
+                        Intent productList = new Intent(Home.this, ProductList.class);
+                        productList.putExtra("CategoryId",adapter.getRef(position).getKey());
+                        startActivity(productList);
                     }
                 });
             }
+
         };
+        adapter.startListening();
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     @Override

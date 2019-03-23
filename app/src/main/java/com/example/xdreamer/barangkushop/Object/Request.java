@@ -5,25 +5,34 @@ import java.util.List;
 public class Request {
     private String phone;
     private String name;
-    private String address;
+    private String idgame;
     private String total;
     private String status;
-    private String comment;
+    private String catatan;
+    private String contact;
     //private String paymentState;  when using PAYPAL USING THIS STRING
     private List<Order> products;
 
     public Request() {
-
     }
 
-    public Request(String phone, String name, String address, String total, String status, String comment, List<Order> products) {
+    public Request(String phone, String name, String idgame, String total, String status, String catatan, String contact, List<Order> products) {
         this.phone = phone;
         this.name = name;
-        this.address = address;
+        this.idgame = idgame;
         this.total = total;
         this.status = status;
-        this.comment = comment;
+        this.catatan = catatan;
+        this.contact = contact;
         this.products = products;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public String getPhone() {
@@ -42,12 +51,20 @@ public class Request {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCatatan() {
+        return catatan;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCatatan(String catatan) {
+        this.catatan = catatan;
+    }
+
+    public String getIdgame() {
+        return idgame;
+    }
+
+    public void setIdgame(String idgame) {
+        this.idgame = idgame;
     }
 
     public String getTotal() {
@@ -65,15 +82,6 @@ public class Request {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
 
     public List<Order> getProducts() {
         return products;

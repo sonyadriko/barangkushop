@@ -2,11 +2,15 @@ package com.example.xdreamer.barangkushop;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+//import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.xdreamer.barangkushop.Common.Common;
@@ -17,8 +21,10 @@ import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.Object.Products;
 import com.example.xdreamer.barangkushop.ViewHolder.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.squareup.picasso.Picasso;
 
 public class ProductList extends AppCompatActivity {
@@ -97,7 +103,7 @@ public class ProductList extends AppCompatActivity {
             categoryId = getIntent().getStringExtra("CategoryId");
         if (!categoryId.isEmpty() && categoryId != null) {
             if (Common.isConnectedToInternet(getBaseContext())) {
-                loadListFood(categoryId);
+               loadListFood(categoryId);
             } else {
                 Toast.makeText(ProductList.this, "Please check your connection...", Toast.LENGTH_SHORT).show();
                 return;
@@ -107,12 +113,16 @@ public class ProductList extends AppCompatActivity {
     }
 
     private void loadListFood(String categoryId) {
-        adapter = new FirebaseRecyclerAdapter<Products, ProductViewHolder>(Products.class,
-                R.layout.product_item,
-                ProductViewHolder.class,
-                productList.orderByChild("menuId").equalTo(categoryId)) {
+
+        Query listProductById = productList.orderByChild("menuId").equalTo(categoryId);
+
+        FirebaseRecyclerOptions<Products> Options = new FirebaseRecyclerOptions.Builder<Products>()
+                .setQuery(listProductById,Products.class)
+                .build();
+
+        adapter = new FirebaseRecyclerAdapter<Products, ProductViewHolder>(Options) {
             @Override
-            protected void populateViewHolder(final ProductViewHolder viewHolder, final Products model, final int position) {
+            protected void onBindViewHolder(@NonNull final ProductViewHolder viewHolder, final int position, @NonNull final Products model) {
                 viewHolder.product_name.setText(model.getName());
                 viewHolder.product_price.setText(String.format("Rp. " + model.getPrice()));
                 Picasso.get()
@@ -185,9 +195,16 @@ public class ProductList extends AppCompatActivity {
 
 
             }
-        }
 
-        ;
+            @NonNull
+            @Override
+            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View itemView = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.product_item, viewGroup, false);
+                return new ProductViewHolder(itemView);
+            }
+        };
+        adapter.startListening();
         recyclerView.setAdapter(adapter);
         swipeRefreshLayout.setRefreshing(false);
 
@@ -198,5 +215,11 @@ public class ProductList extends AppCompatActivity {
         super.onResume();
         if (adapter != null)
             adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

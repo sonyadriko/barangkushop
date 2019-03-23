@@ -3,8 +3,8 @@ package com.example.xdreamer.barangkushop;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         nameApp = findViewById(R.id.nameappmain);
         sloganApp = findViewById(R.id.textSlogan);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/TaxiDriver.ttf");
-        Typeface typeface1 = Typeface.createFromAsset(getAssets(), "fonts/MarvelousSans.otf");
+        Typeface typeface1 = Typeface.createFromAsset(getAssets(), "fonts/hellovintage.ttf");
         sloganApp.setTypeface(typeface);
         nameApp.setTypeface(typeface1);
 

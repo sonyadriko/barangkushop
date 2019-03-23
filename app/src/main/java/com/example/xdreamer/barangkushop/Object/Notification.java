@@ -1,11 +1,23 @@
 package com.example.xdreamer.barangkushop.Object;
 
 public class Notification {
-    public String body;
     public String title;
+    public String body;
 
-    public Notification(String body, String title) {
+
+    public Notification(String title, String body) {
+        this.title = title;
         this.body = body;
+    }
+
+    public Notification() {
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -15,13 +27,5 @@ public class Notification {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

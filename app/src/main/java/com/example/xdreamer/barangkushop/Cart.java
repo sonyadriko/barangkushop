@@ -4,16 +4,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.annotation.NonNull;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -67,6 +66,8 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
     TextView totalPrice;
     Button placeOrder;
 
+    String order_number = String.valueOf(System.currentTimeMillis());
+
     List<Order> cart = new ArrayList<>();
 
     CartAdapter adapter;
@@ -76,7 +77,7 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
     static PayPalConfiguration config = new PayPalConfiguration()
             .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
             .clientId(Config.PAYPAL_CLIENT_ID);
-    String address, comment;
+    String address, catatan, contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,7 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
             public void onClick(View v) {
                 if (cart.size() > 0)
                     showDialogAlert();
+                    //showPaymentRek();
                 else
                     Toast.makeText(Cart.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
             }
@@ -135,8 +137,9 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
         LayoutInflater inflater = this.getLayoutInflater();
         View layout_ordercomment = inflater.inflate(R.layout.order_confirm_layout, null);
 
-        final EditText edtIgn = layout_ordercomment.findViewById(R.id.edtIGNOrder);
-        final EditText edtComment = layout_ordercomment.findViewById(R.id.edtCommentOrder);
+        final EditText edtIdAcc = layout_ordercomment.findViewById(R.id.edtIGNOrder);
+        final EditText edtCatatan = layout_ordercomment.findViewById(R.id.edtCatatanOrder);
+        final EditText edtContact = layout_ordercomment.findViewById(R.id.edtContactOrder);
 
         alertDialog.setView(layout_ordercomment);
         alertDialog.setIcon(R.drawable.ic_shopping_cart_black_24dp);
@@ -163,6 +166,10 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
                 startActivityForResult(intent, PAYPAL_REQUEST_CODE); */
                 //end of paypal
 
+                address = edtIdAcc.getText().toString();
+                catatan = edtCatatan.getText().toString();
+                contact = edtContact.getText().toString();
+
 
                 Request request = new Request(
                         Common.currentUser.getPhone(),
@@ -170,7 +177,8 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
                         address,
                         totalPrice.getText().toString(),
                         "0",
-                        comment,
+                        catatan,
+                        contact,
                         cart
                 );
 
@@ -179,10 +187,9 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
 
                 new Database(getBaseContext()).cleanCart(Common.currentUser.getPhone());
 
-                sendNotificationOrder(order_number);
+                //sendNotificationOrder(order_number);
                 // Toast.makeText(Cart.this, "Thank You, Order place", Toast.LENGTH_SHORT).show();
-                //sendPayment();
-                showPaymentRekening();
+                showPaymentRek();
 
             }
         });
@@ -196,12 +203,46 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
 
     }
 
+    private void showPaymentRek(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Cart.this);
+        //alertDialog.setTitle("PEMBAYARAN");
+        //alertDialog.setMessage("Transfer ke rekening mandiri Atas Nama BARANGKU 1410007920846");
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View layout_ordercomment = inflater.inflate(R.layout.activity_payment, null);
+
+        final Button btkOk = layout_ordercomment.findViewById(R.id.btnDone);
+
+        btkOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendNotificationOrder(order_number);
+            }
+        });
+
+        alertDialog.setView(layout_ordercomment);
+       // alertDialog.setIcon(R.drawable.ic_shopping_cart_black_24dp);
+
+        /*alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendNotificationOrder(order_number);
+            }
+        });
+*/
+        alertDialog.show();
+
+    }
+
     private void showPaymentRekening() {
     }
 
     private void sendPayment() {
         if (Common.currentUser != null)
             startActivity(new Intent(Cart.this, Payment.class));
+
+
+        //sendNotificationOrder(order_number);
     }
 
 
@@ -255,6 +296,7 @@ public class Cart extends AppCompatActivity implements RecyclerItemTouchHelperLi
     */
 
     private void sendNotificationOrder(final String order_number) {
+
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query data = tokens.orderByChild("serverToken").equalTo(true);
         data.addValueEventListener(new ValueEventListener() {

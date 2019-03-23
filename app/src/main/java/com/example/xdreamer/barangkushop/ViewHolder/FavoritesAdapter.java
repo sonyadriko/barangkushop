@@ -2,8 +2,8 @@ package com.example.xdreamer.barangkushop.ViewHolder;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +14,7 @@ import com.example.xdreamer.barangkushop.Database.Database;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
 import com.example.xdreamer.barangkushop.Object.Favorites;
 import com.example.xdreamer.barangkushop.Object.Order;
-import com.example.xdreamer.barangkushop.Object.Products;
 import com.example.xdreamer.barangkushop.ProductDetailsNew;
-import com.example.xdreamer.barangkushop.ProductList;
 import com.example.xdreamer.barangkushop.R;
 import com.squareup.picasso.Picasso;
 

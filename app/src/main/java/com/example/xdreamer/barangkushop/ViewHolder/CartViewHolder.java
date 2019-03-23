@@ -1,15 +1,14 @@
 package com.example.xdreamer.barangkushop.ViewHolder;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.xdreamer.barangkushop.Common.Common;
 import com.example.xdreamer.barangkushop.Interface.ItemClickListener;
 import com.example.xdreamer.barangkushop.R;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="10dp">
@@ -14,17 +14,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edtIGNOrder"
-            android:singleLine="true"
             android:textSize="24dp"
-            android:hint="IGN"/>
+            android:hint="Informasi akun game"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="16dp"
+            android:text="Nama karakter akun / Id akun"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edtCommentOrder"
+            android:id="@+id/edtCatatanOrder"
             android:textSize="24dp"
-            android:hint="Comment"/>
+            android:layout_marginTop="10dp"
+            android:hint="Catatan untuk admin"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:textColor="#000"
+            android:textSize="16dp"
+            android:layout_height="wrap_content"
+            android:text="Catatan tambahan untuk admin"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/edtContactOrder"
+            android:textSize="24dp"
+            android:layout_marginTop="10dp"
+            android:hint="ID Line / WhatsApp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:textColor="#000"
+            android:textSize="16dp"
+            android:layout_height="wrap_content"
+            android:text="Kontak yang dapat dihubungi"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_marginTop="20dp"
+            android:textSize="16dp"
+            android:text="Dimohon untuk menuliskan informasi secara lengkap, supaya admin dapat segera memproses orderan"/>
     </LinearLayout>
 
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

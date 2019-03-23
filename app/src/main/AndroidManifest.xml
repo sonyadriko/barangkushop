@@ -13,11 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".ShowComments"></activity>
+        <activity android:name=".ShowComments" />
         <activity android:name=".FavoritesActivity" />
         <activity android:name=".Payment" />
-        <!--
-<service
+
+        <service
             android:name="com.paypal.android.sdk.payments.PayPalService"
             android:exported="false" />
 
@@ -25,7 +25,6 @@
         <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
         <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
         <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
-        -->
         <activity android:name=".ForgotPassword" />
         <activity android:name=".OrderStatus" />
         <activity android:name=".MainActivity">

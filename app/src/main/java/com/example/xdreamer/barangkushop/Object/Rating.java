@@ -2,16 +2,16 @@ package com.example.xdreamer.barangkushop.Object;
 
 public class Rating {
     private String userPhone;
-    private String foodId;
+    private String productId;
     private String rateValue;
     private String comment;
 
     public Rating() {
     }
 
-    public Rating(String userPhone, String foodId, String rateValue, String comment) {
+    public Rating(String userPhone, String productId, String rateValue, String comment) {
         this.userPhone = userPhone;
-        this.foodId = foodId;
+        this.productId = productId;
         this.rateValue = rateValue;
         this.comment = comment;
     }
@@ -24,12 +24,12 @@ public class Rating {
         this.userPhone = userPhone;
     }
 
-    public String getFoodId() {
-        return foodId;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setFoodId(String foodId) {
-        this.foodId = foodId;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
     public String getRateValue() {

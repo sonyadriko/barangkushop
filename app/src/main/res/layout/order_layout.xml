@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,7 +30,15 @@
                 android:textAllCaps="true"
                 android:textStyle="bold" />
 
-
+            <TextView
+                android:id="@+id/order_date"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:text="ORDER DATE"
+                android:textAllCaps="true"
+                android:textStyle="italic" />
 
             <TextView
                 android:id="@+id/order_status"
@@ -53,14 +61,24 @@
                 android:textStyle="italic" />
 
             <TextView
-                android:id="@+id/order_address"
+                android:id="@+id/order_idgame"
                 android:layout_width="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical|start"
-                android:text="IGN Buyer"
+                android:text="Id Game"
                 android:textAllCaps="true"
                 android:textStyle="italic" />
+            <TextView
+                android:id="@+id/order_contact"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|start"
+                android:text="Contact"
+                android:textAllCaps="true"
+                android:textStyle="italic" />
+
 
         </LinearLayout>
 
@@ -73,4 +91,4 @@
 
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

@@ -1,12 +1,12 @@
 package com.example.xdreamer.barangkushop;
 
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -15,15 +15,10 @@ import com.example.xdreamer.barangkushop.Database.Database;
 import com.example.xdreamer.barangkushop.Helper.RecyclerItemTouchHelper;
 import com.example.xdreamer.barangkushop.Interface.RecyclerItemTouchHelperListener;
 import com.example.xdreamer.barangkushop.Object.Favorites;
-import com.example.xdreamer.barangkushop.Object.Order;
 import com.example.xdreamer.barangkushop.ViewHolder.FavoritesAdapter;
 import com.example.xdreamer.barangkushop.ViewHolder.FavoritesViewHolder;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
 
 public class FavoritesActivity extends AppCompatActivity implements RecyclerItemTouchHelperListener {
 
