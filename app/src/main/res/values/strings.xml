@@ -5,4 +5,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="forgot_pwd"><u>Forgot Password</u></string>
+
+    <string name="facebook_app_id">370601313542039</string>
+    <string name="facebook_login_protocol_name">fb370601313542039</string>
+    <string name="account_kit_client_token">13ae5dae35efe648e874f58fc0ed2366</string>
 </resources>

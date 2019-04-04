@@ -18,6 +18,9 @@ public class Common {
 
     public static final String INTENT_PRODUCT_ID = "ProductId";
 
+
+    public static final int PICK_IMAGE_REQUEST = 71;
+
     private static final String BASE_URL = "https://fcm.googleapis.com/";
 
     public static APIService getFCMService() {

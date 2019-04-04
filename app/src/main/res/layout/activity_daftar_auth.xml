@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DaftarAuth">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etNomorhpauth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Nomor HP"
+            android:inputType="number" />
+
+        <!--   <EditText
+             android:id="@+id/etPasswordauth"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_margin="8dp"
+             android:hint="Password"
+             android:inputType="textPassword" />
+
+           <EditText
+                 android:id="@+id/etVerifikasiauth"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_margin="8dp"
+                 android:hint="Verifikasi"
+                 android:inputType="textPassword" />
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="2"
+                 android:orientation="horizontal">
+
+                 <Button
+                     android:layout_width="wrap_content"
+                     android:layout_weight="1"
+                     android:layout_height="wrap_content"
+                     android:text="Verifikasi" />
+
+
+                 <Button
+                     android:layout_weight="1"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Resend" />
+
+             </LinearLayout>
+
+     -->
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnSignAuth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/mainColor"
+        android:text="Sign in"
+        android:textColor="#fff" />
+
+</RelativeLayout>

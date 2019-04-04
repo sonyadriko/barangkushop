@@ -11,6 +11,10 @@ public class User {
     public User() {
     }
 
+    public User(String phone) {
+        Phone = phone;
+    }
+
     public User(String name, String password, String secureCode) {
         Name = name;
         Password = password;

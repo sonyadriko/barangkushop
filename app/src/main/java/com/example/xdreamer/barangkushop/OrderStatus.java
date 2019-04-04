@@ -26,6 +26,7 @@ public class OrderStatus extends AppCompatActivity {
 
     FirebaseRecyclerAdapter<Request, OrderViewHolder> adapter;
 
+
     FirebaseDatabase database;
     DatabaseReference requests;
 
@@ -42,14 +43,10 @@ public class OrderStatus extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        //if (Common.currentUser != null) {
         if (getIntent() == null)
             loadOrders(Common.currentUser.getPhone());
         else
             loadOrders(getIntent().getStringExtra("userPhone"));
-        //}
-
-
     }
 
     private void loadOrders(String phone) {
